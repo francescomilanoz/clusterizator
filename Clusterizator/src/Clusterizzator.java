@@ -25,10 +25,35 @@ public class Clusterizzator {
         states = new ArrayList<State>(Arrays.asList(italy, russia, india, brazil, USA, taiwan, vietnam, china));
     }
 
+    /*
+    public void clusterizeEqualStates() {
+        List<State> newStates = new ArrayList<>();
+        List<State> toBeRemoved = new ArrayList<>();
+
+        for(State state1: states) {
+            for(State state2: states) {
+                if(state1.getStatesDifference(state2, weights) == 0.0 && !(state1.getStateName().equals(state2.getStateName()))) {
+                    State state12 = State.generateStatesCluster(state1, state2);
+                    newStates.add(state12);
+                    toBeRemoved.add(state1);
+                    toBeRemoved.add(state2);
+                }
+            }
+        }
+        for(State s: toBeRemoved) {
+            if(states.contains(s))
+                states.remove(s);
+        }
+        for(State s: newStates) {
+            states.add(s);
+        }
+    }
+    */
+
     public void generateNextClusters() {
 
         computedStates.clear();
-        recordGlobalStates.clear(); 
+        recordGlobalStates.clear();
 
         for(int i = 0; i < states.size() / 2; i++) {
             Double recordGlobalDifference = null;
