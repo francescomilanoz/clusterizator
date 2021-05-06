@@ -11,7 +11,7 @@ public class State {
         this.stateName = stateName;
     }
 
-    public Double getStatesDifference (State otherState, List<Integer> weights) {
+    public Double getStatesDifference (State otherState, List<Double> weights) {
         Double statesDifference = 0.0;
         for (int i = 0; i < this.stateValues.size(); i++) {
             Double valState1 = this.stateValues.get(i);

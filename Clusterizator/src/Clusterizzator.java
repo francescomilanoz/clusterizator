@@ -2,14 +2,14 @@ import java.util.*;
 
 public class Clusterizzator {
 
-    List<Integer> weights;
+    List<Double> weights;
     List<State> states;
     Map<Integer, List<State>> recordGlobalStates = new LinkedHashMap<>();
     List<State> computedStates = new ArrayList<>();
 
     public Clusterizzator() {
         //Initialize weights array
-        weights = new ArrayList<Integer>(Arrays.asList(1, 1, 1, 1));
+        weights = new ArrayList<Double>(Arrays.asList(1.0, 1.0, 1.0, 1.0));
 
         //Initialize States
         State italy = new State("Italy", new ArrayList<Double>(Arrays.asList(1.0, 1.0, 1.0, 1.0)));
