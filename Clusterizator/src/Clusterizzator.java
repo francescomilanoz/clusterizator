@@ -4,6 +4,8 @@ public class Clusterizzator {
 
     List<Integer> weights;
     List<State> states;
+    Map<Integer, List<State>> recordGlobalStates = new LinkedHashMap<>();
+    List<State> computedStates = new ArrayList<>();
 
     public Clusterizzator() {
         //Initialize weights array
@@ -19,20 +21,61 @@ public class Clusterizzator {
         State vietnam = new State("Vietnam", new ArrayList<Double>(Arrays.asList(0.0, 0.0, 0.0, 0.0)));
         State china = new State("China", new ArrayList<Double>(Arrays.asList(0.0, 0.0, 1.0, 0.0)));
 
-
-
         //Populate states array
         states = new ArrayList<State>(Arrays.asList(italy, russia, india, brazil, USA, taiwan, vietnam, china));
     }
 
-    public Map<Integer, ArrayList<String>> computeClusters() {
-        Map<Integer, ArrayList<String>> clusters = new LinkedHashMap<Integer, ArrayList<String>>();
+    public void generateNextClusters() {
+
+        computedStates.clear();
+        recordGlobalStates.clear(); 
+
+        for(int i = 0; i < states.size() / 2; i++) {
+            Double recordGlobalDifference = null;
+            List<State> temporaryCluster = new ArrayList<>();
+
+            for(State state1: states) {
+
+                if(computedStates.contains(state1))
+                    continue;
+
+                Double recordCurrentDifference = null;
+                State recordCurrentState = null; //It contains the temporary best state found for state1
+                for(State state2: states) {
+
+                    if(computedStates.contains(state2) || state1.equals(state2))
+                        continue;
+
+                    Double currentDifference = state1.getStatesDifference(state2, weights);
+
+                    if(recordCurrentDifference == null || currentDifference < recordCurrentDifference) {
+                        recordCurrentDifference = currentDifference;
+                        recordCurrentState = state2;
+                    }
+                }
+                if(recordGlobalDifference == null || recordCurrentDifference < recordGlobalDifference) {
+                    recordGlobalDifference = recordCurrentDifference;
+                    temporaryCluster.clear();
+                    temporaryCluster.add(state1);
+                    temporaryCluster.add(recordCurrentState);
+                }
+            }
+            computedStates.addAll(temporaryCluster);
+            recordGlobalStates.put(i, temporaryCluster);
+        }
+
+    }
+
+    public Map<Integer, List<State>> computeClusters() {
 
         //First loop: find the pairs of states that are most similar to each other
         //Compare each state (skipping those already paired) with all the others finding the most similar, calculating the total difference between all the scores
+
+        /*
         Map<Integer, ArrayList<String>> statePairs = new LinkedHashMap<Integer, ArrayList<String>>();
         List<String> computedStates = new ArrayList<String>();
         Double bestGlobalMinimumDistance = null; //L'idea è che raggiungere l'ottimo, deve minimizzare la distanza media tra gli stati, e quindi il risultato dipende anche dall'ordine in cui metto gli stati all'inizio
+
         //Eg: stato 1 ha una distanza minima di 5 con lo stato 5, e una distanza di 5.5 con lo stato 10. Mettiamo però che lo stato 5 abbia distanza 0 con lo stato
         //6 e distanza 10 con tutti gli altri stati -> dovrebbero stare insieme, ma se non provassi tutte le permutazioni non lo sarebbero dato che testo prima
         //stato 1 con stato 5 e li accoppio! Quindi avrei una coppia [1, 5] e una coppia [6, 7], per esempio, con distanza totale 5 + 10.
@@ -85,9 +128,20 @@ public class Clusterizzator {
             //System.out.println(statePairs.get(0) + ", " + statePairs.get(1) + ", " + statePairs.get(2) + ", " + statePairs.get(3));
         }
 
-        System.out.println("done...");
+ */
 
-        return clusters;
+        generateNextClusters();
+
+        states.clear();
+        for(Integer k: recordGlobalStates.keySet()) {
+            State state1 = recordGlobalStates.get(k).get(0);
+            State state2 = recordGlobalStates.get(k).get(1);
+            State state12 = State.generateStatesCluster(state1, state2);
+            states.add(state12);
+        }
+        generateNextClusters();
+
+       return recordGlobalStates;
     }
 
 
