@@ -11,7 +11,7 @@ public class State {
         this.stateName = stateName;
     }
 
-    public Double getStatesDifference (State otherState, List<Double> weights) {
+    public Double getStatesDifference(State otherState, List<Double> weights) {
         Double statesDifference = 0.0;
         for (int i = 0; i < this.stateValues.size(); i++) {
             Double valState1 = this.stateValues.get(i);
@@ -42,10 +42,10 @@ public class State {
 
     public static State generateStatesCluster(State state1, State state2) {
         State statesCluster = new State("", new ArrayList<Double>());
-        statesCluster.setStateName(state1.getStateName()+", "+state2.getStateName());
+        statesCluster.setStateName(state1.getStateName() + ", " + state2.getStateName());
         List<Double> valuesAverages = new ArrayList<>();
-        for(int i = 0; i < state1.getStateValues().size(); i++) {
-            valuesAverages.add((state1.getStateValues().get(i) + state2.getStateValues().get(i))/2);
+        for (int i = 0; i < state1.getStateValues().size(); i++) {
+            valuesAverages.add((state1.getStateValues().get(i) + state2.getStateValues().get(i)) / 2);
         }
         statesCluster.setStateValues(valuesAverages);
         return statesCluster;
