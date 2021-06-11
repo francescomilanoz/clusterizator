@@ -6,14 +6,25 @@ public class Clusterizzator {
     List<State> states;
     Map<Integer, List<State>> recordGlobalStates = new LinkedHashMap<>();
     List<State> computedStates = new ArrayList<>();
-    public List<String> factorsName = new ArrayList<>(Arrays.asList("Democratic form of government", "High state of democracy", "Division of power into regions/states", "High level of corruption", "High level of perceived corruption", "Individualistic culture (based on Hofstede scoring)", "Sustainability - hygiene (based on EPI) ", "Income inequality (based on GINI index)", "Overpopulation", "Aging population (Young p.)", "Good healthcare infrastructure (unverdeveloped h.)", "Private healthcare", "High level of education (Low)", "Social welfare policies = Social spending (No help from government)", "The majority of the population is religious", "Buddhism", "Taoism", "Shinto", "Christianity", "Folk religion", "Hinduism", "Islam", "Unaffiliated", "Cyber security problems", "Collection and storage of biometrics data", "Digitally advanced", "Strong ICT sector", "Good innovation infrastructures and R&D", "Developing country", "R&D spending (high 1, low 0)", "High ICT Development (ICT Development index)", "Contact tracing app", "Lockdowns", "Big data for contact tracing"));
+    //Cluster con tutti i parametri:
+    //public List<String> factorsName = new ArrayList<>(Arrays.asList("Democratic form of government", "High state of democracy", "Division of power into regions/states", "High level of corruption", "High level of perceived corruption", "Individualistic culture (based on Hofstede scoring)", "Sustainability - hygiene (based on EPI) ", "Income inequality (based on GINI index)", "Overpopulation", "Aging population (Young p.)", "Good healthcare infrastructure (unverdeveloped h.)", "Private healthcare", "High level of education (Low)", "Social welfare policies = Social spending (No help from government)", "The majority of the population is religious", "Buddhism", "Taoism", "Shinto", "Christianity", "Folk religion", "Hinduism", "Islam", "Unaffiliated", "Cyber security problems", "Collection and storage of biometrics data", "Digitally advanced", "Strong ICT sector", "Good innovation infrastructures and R&D", "Developing country", "R&D spending (high 1, low 0)", "High ICT Development (ICT Development index)", "Contact tracing app", "Lockdowns", "Big data for contact tracing"));
+
+    //Cluster con hostfede:
+    public List<String> factorsName = new ArrayList<>(Arrays.asList("Individualistic", "Power distribution", "Uncertainty avoidance", "Long term orientation", "Indulgence"));
+
 
     public Clusterizzator() {
         //Initialize weights array
-        weights = new ArrayList<Double>(Arrays.asList(2.0, 5.0, 2.0, 2.0, 2.0, 5.0, 5.0, 4.0, 5.0, 5.0, 5.0, 3.0, 2.0, 3.0, 3.0, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 2.0, 3.0, 4.0, 3.0, 4.0, 4.0, 2.0, 0.0, 0.0, 0.0, 0.0));
+        //Cluster con tutti i parametri con i pesi:
+        //weights = new ArrayList<Double>(Arrays.asList(2.0, 5.0, 2.0, 2.0, 2.0, 5.0, 5.0, 4.0, 5.0, 5.0, 5.0, 3.0, 2.0, 3.0, 3.0, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 2.0, 3.0, 4.0, 3.0, 4.0, 4.0, 2.0, 0.0, 0.0, 0.0, 0.0));
+        //Cluster con tutti i parametri senza i pesi:
+        //weights = new ArrayList<Double>(Arrays.asList(1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0));
 
-        //Initialize States
-        State southKorea = new State("South Korea",     new ArrayList<Double>(Arrays.asList(1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.5, 1.0, 0.0, 0.5, 0.5, 1.0, 1.0, 0.5, 0.5, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 1.0, 0.5, 0.0, 1.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0)));
+        //Cluster con hostfede:
+        weights = new ArrayList<Double>(Arrays.asList(1.0, 1.0, 1.0, 1.0, 1.0));
+
+        //Cluster con tutti i parametri -> Initialize States
+        /*State southKorea = new State("South Korea",     new ArrayList<Double>(Arrays.asList(1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.5, 1.0, 0.0, 0.5, 0.5, 1.0, 1.0, 0.5, 0.5, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 1.0, 0.5, 0.0, 1.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0)));
         State japan = new State("Japan",                new ArrayList<Double>(Arrays.asList(1.0, 1.0, 1.0, 0.0, 0.0, 0.5, 1.0, 0.5, 1.0, 1.0, 1.0, 0.5, 1.0, 1.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 0.5, 0.0)));
         State uk = new State("UK",                      new ArrayList<Double>(Arrays.asList(1.0, 1.0, 0.5, 0.0, 0.0, 1.0, 1.0, 0.5, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0)));
         State singapore = new State("Singapore",        new ArrayList<Double>(Arrays.asList(1.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 1.0, 0.5, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.5, 0.5, 0.0, 0.5, 1.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0)));
@@ -29,10 +40,24 @@ public class Clusterizzator {
         State india = new State("India",                new ArrayList<Double>(Arrays.asList(1.0, 1.0, 1.0, 0.5, 0.5, 0.5, 0.0, 1.0, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5, 0.0, 1.0, 0.5, 0.0, 0.0, 0.0, 1.0, 0.5, 0.0, 1.0, 1.0, 0.0)));
         State russia = new State("Russia",              new ArrayList<Double>(Arrays.asList(0.5, 0.0, 1.0, 1.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.5, 0.5, 0.0, 0.0, 0.5, 0.0, 1.0, 0.5, 1.0, 0.5, 1.0, 0.5)));
         State italy = new State("Italy",                new ArrayList<Double>(Arrays.asList(1.0, 1.0, 1.0, 0.0, 0.5, 1.0, 1.0, 1.0, 0.5, 1.0, 1.0, 0.0, 1.0, 1.0, 0.5, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.5, 0.5, 0.0, 0.5, 1.0, 1.0, 1.0, 0.0)));
-
-
-
-
+*/
+        //Cluster con hostfede -> Initialize States
+        State australia = new State("Australia",     new ArrayList<Double>(Arrays.asList(1.0, 1.0, 1.0, 1.0, 0.0)));
+        State iceland = new State("Iceland",     new ArrayList<Double>(Arrays.asList(1.0, 0.5, 1.0, 1.0, 0.0)));
+        State china = new State("China",     new ArrayList<Double>(Arrays.asList(0.0, 0.5, 1.0, 0.5, 0.0)));
+        State newZealand = new State("New Zealand",     new ArrayList<Double>(Arrays.asList(1.0, 0.5, 1.0, 1.0, 0.5)));
+        State japan = new State("Japan",     new ArrayList<Double>(Arrays.asList(1.0, 0.5, 1.0, 1.0, 0.5)));
+        State vietnam = new State("Vietnam",     new ArrayList<Double>(Arrays.asList(0.0, 0.0, 0.5, 0.0, 1.0)));
+        State singapore = new State("Singapore",     new ArrayList<Double>(Arrays.asList(0.0, 0.0, 0.0, 0.5, 1.0)));
+        State southKorea = new State("South Korea",     new ArrayList<Double>(Arrays.asList(0.0, 0.0, 0.5, 0.0, 1.0)));
+        State taiwan = new State("Taiwan",     new ArrayList<Double>(Arrays.asList(0.0, 0.0, 0.5, 0.0, 1.0)));
+        State india = new State("India",     new ArrayList<Double>(Arrays.asList(1.0, 1.0, 0.0, 1.0, 0.0)));
+        State uk = new State("UK",     new ArrayList<Double>(Arrays.asList(1.0, 1.0, 0.5, 0.5, 0.0)));
+        State russia = new State("Russia",     new ArrayList<Double>(Arrays.asList(0.0, 1.0, 0.0, 0.5, 0.0)));
+        State italy = new State("Italy",     new ArrayList<Double>(Arrays.asList(1.0, 1.0, 0.0, 0.5, 0.5)));
+        State usa = new State("USA",     new ArrayList<Double>(Arrays.asList(1.0, 0.5, 1.0, 0.0, 1.0)));
+        State brazil = new State("Brazil",     new ArrayList<Double>(Arrays.asList(0.0, 0.0, 0.5, 0.0, 1.0)));
+        State brazil2 = new State("Brazil2",     new ArrayList<Double>(Arrays.asList(0.0, 0.0, 0.5, 0.0, 1.0)));
         //Populate states array
         states = new ArrayList<State>(Arrays.asList(southKorea, japan, uk, singapore, newZealand, iceland, australia, china, vietnam, taiwan, usa, brazil, brazil2, india, russia, italy));
     }
